@@ -1,5 +1,5 @@
 import { Model } from 'sequelize';
-import db from '.';
+import sequelize from '.'; // '.' busca no diretorio local arquivos exportados e da preferencias para INDEX
 // import OtherModel from './OtherModel';
 
 class Example extends Model {
@@ -11,7 +11,7 @@ Example.init({
 }, {
   // ... Outras configs
   underscored: true,
-  sequelize: db,
+  sequelize,
   // modelName: 'example',
   timestamps: false,
 });
