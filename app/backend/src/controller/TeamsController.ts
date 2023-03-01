@@ -9,9 +9,10 @@ export default class TeamsController {
     this._teamsService = new TeamsService()
   }
 
-  public teste(req:Request , res: Response):Response<any, Record<string, any>>{
-    const param = req.body;
-    const response = this._teamsService.teste(param)
-    return res.status(status.OK).json(response)
+  public async findAll(_req:Request , res: Response)
+  :Promise <Response<any, Record<string, any>>>
+  {
+    const teams = await this._teamsService.findAll()
+    return res.status(status.OK).json(teams)
   }
 }

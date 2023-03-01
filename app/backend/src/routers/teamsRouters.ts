@@ -5,6 +5,6 @@ const router = express.Router();
 
 const teamsController = new TeamsController();
 
-router.get('/', (req, res)=>teamsController.teste(req, res));
+router.get('/', (req, res)=>teamsController.findAll(req, res));
 
 export default router;

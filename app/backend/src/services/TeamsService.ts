@@ -1,6 +1,8 @@
+import Team from '../database/models/Team';
+
 export default class TeamsService {
-   public teste(param:string):string{
-    
-    return param
+   public async findAll():Promise<Array<any>>{
+    const teams = await Team.findAll()
+    return teams
    }        
 }
