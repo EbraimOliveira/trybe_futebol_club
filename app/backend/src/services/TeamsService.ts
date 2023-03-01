@@ -1,17 +1,18 @@
 import Team from '../database/models/Team';
 
+type team = {
+  id:number,
+  teamName:string,
+};
+
 export default class TeamsService {
-  public async findAll():Promise<Array<any>> {
+  public findAll = async ():Promise<Array<team>> => {
     const teams = await Team.findAll();
     return teams;
-  }
+  };
 
-  public async getById(id:number):Promise<any> {
-    try {
-      const team = await Team.findByPk(id);
-      return team;
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  public getById = async (id:number):Promise<team | null> => {
+    const team = await Team.findByPk(id);
+    return team;
+  };
 }
