@@ -12,7 +12,8 @@
     "test:debug": "DEBUG=true npm test",
     "compose:up": "cd app && docker-compose up -d --build",
     "compose:down": "cd app && docker-compose down --remove-orphans",
-    "logs": "cd app && docker-compose logs -f"
+    "logs": "cd app && docker-compose logs -f",
+    "lint": "npx eslint ./app/backend/src -c ./app/backend/.eslintrc.json --ext .ts && npx eslint ./app/frontend/src -c ./app/frontend/.eslintrc.json --ext .ts"
   },
   "author": "Trybe",
   "devDependencies": {

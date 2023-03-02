@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { OK } from '../statusCode';
-import TeamsService from '../services/TeamsService';
+import TeamsService from '../service/TeamsService';
 
 export default class TeamsController {
   private _teamsService: TeamsService;
