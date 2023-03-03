@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { OK } from '../statusCode';
+import { OK } from '../utils/statusCode';
 import TeamsService from '../service/TeamsService';
 
 export default class TeamsController {

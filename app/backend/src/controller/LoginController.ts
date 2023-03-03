@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { OK } from '../statusCode';
+import { OK } from '../utils/statusCode';
 import LoginService from '../service/LoginService';
+// import tokenGeneration from '../utils/tokenGeneration';
 
 export default class LoginController {
   private _loginService: LoginService;
@@ -9,9 +10,12 @@ export default class LoginController {
     this._loginService = new LoginService();
   }
 
-  public async teste(_req:Request, res: Response)
+  public async login(req:Request, res: Response)
     :Promise <Response> {
-    const teams = await this._loginService.teste();
-    return res.status(OK).json(teams);
+    const {password} = req.body;
+    const {email}= req.body;
+    const user = await this._loginService.login(email, password);
+    // const newToken = tokenGeneration(a)
+    return res.status(OK).json(user);
   }
 }

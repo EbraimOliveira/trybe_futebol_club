@@ -7,8 +7,10 @@ import { app } from '../app';
 // import Example from '../database/models/ExampleModel';
 
 import { Response } from 'superagent';
+
 import Team from '../database/models/Team';
-import teamsFake from './mocks';
+import { teams } from './mocks';
+const teamsFake = teams;
 
 chai.use(chaiHttp);
 const { expect } = chai;
