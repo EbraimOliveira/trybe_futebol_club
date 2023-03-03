@@ -1,6 +1,5 @@
 import { INTEGER, STRING, Model } from 'sequelize';
 import sequelize from '.'; // '.' busca no diretorio local arquivos exportados e da preferencias para INDEX
-// import OtherModel from './OtherModel';
 
 class Team extends Model {
   // declare <campo>: <tipo>;
@@ -22,22 +21,10 @@ Team.init({
     field: 'team_name',
   },
 }, {
-  // ... Outras configs
+
   underscored: true,
-  sequelize,
-  // modelName: 'example',
+  sequelize, // esse é a instância do Sequelize com o parâmetro das configurações de conexão.
   timestamps: false,
 });
-
-/**
-  * `Workaround` para aplicar as associations em TS:
-  * Associations 1:N devem ficar em uma das instâncias de modelo
-  * */
-
-// OtherModel.belongsTo(Team, { foreignKey: 'campoA', as: 'campoEstrangeiroA' });
-// OtherModel.belongsTo(Team, { foreignKey: 'campoB', as: 'campoEstrangeiroB' });
-
-// Team.hasMany(OtherModel, { foreignKey: 'campoC', as: 'campoEstrangeiroC' });
-// Team.hasMany(OtherModel, { foreignKey: 'campoD', as: 'campoEstrangeiroD' });
 
 export default Team;
