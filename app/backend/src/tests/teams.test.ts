@@ -25,7 +25,7 @@ describe('Test teams entity integrations', ()=>{
       { sinon.stub(Team, 'findAll').resolves(teamsFake)});  // o sinon.stub aqui indica que quando o metodo findaAll de Team for chamado ele deve acessar o teamsFake e não o DB
   
     chaiHttpResponse = await chai.request(app).get('/teams');
-    expect(chaiHttpResponse.body).to.be.deep.equal(teamsFake); // espera-se que o retorno sera do mesmo tipo que chai.body (any)
+    expect(chaiHttpResponse.body).to.be.deep.equal(teamsFake); // espera-se que o retorno será do mesmo tipo que chai.body (any)
   })
 
   it('Get team by id',async () => {       

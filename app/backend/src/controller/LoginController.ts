@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { BAD_REQUEST, OK, UNAUTHORIZED } from '../utils/statusCode';
+import { OK, UNAUTHORIZED } from '../utils/statusCode';
 import LoginService from '../service/LoginService';
 import JwtGenerator from '../utils/JwtGenerator';
 
@@ -17,7 +17,7 @@ export default class LoginController {
     const { email, password } = req.body;
     const user = await this._loginService.login(email, password);
     if (!user) {
-      return res.status(BAD_REQUEST)
+      return res.status(UNAUTHORIZED)
         .json({ message: 'Invalid email or password' });
     }
     const userId = user.id;
