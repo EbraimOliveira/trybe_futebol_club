@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
+
 import { BAD_REQUEST } from '../utils/statusCode';
 
-export default class UserValidation {
+export default class UserValidator {
   public emailValidation = (req:Request, res:Response, next: NextFunction) => {
     const { email } = req.body;
     const regex = /\S+@\S+\.\S+/;

@@ -1,17 +1,27 @@
 import * as express from 'express';
+import JwtValidator from '../middlewares/JwtValidator';
 import LoginController from '../controller/LoginController';
-import UserValidation from '../middlewares/UserValidation';
+import UserValidator from '../middlewares/UserValidator';
+import JwtGenerator from '../utils/JwtGenerator';
 
 const router = express.Router();
 
 const loginController = new LoginController();
-const userValidation = new UserValidation();
+const userValidator = new UserValidator();
+const jwtGenerator = new JwtGenerator();
+const jwtValidator = new JwtValidator(jwtGenerator.secret);
+
+router.post(
+  '/',
+  userValidator.emailValidation,
+  userValidator.passwordValidation,
+  (req, res) => loginController.login(req, res),
+);
 
 router.get(
-  '/',
-  userValidation.emailValidation,
-  userValidation.passwordValidation,
-  (req, res) => loginController.login(req, res),
+  '/role',
+  jwtValidator.tokenValidator,
+  (req, res) => loginController.getUserRole(req, res),
 );
 
 export default router;
