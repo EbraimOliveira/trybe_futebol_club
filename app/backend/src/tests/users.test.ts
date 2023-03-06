@@ -117,7 +117,19 @@ describe('Test users entity integrations', async ()=>{
       // senha: secret_user
   //   },
 
+                
 
+
+
+
+
+
+
+
+
+
+
+  
 
 //   it('Testa se o login com o usuário incorreto da erro', async () => {
 //     const user = {
