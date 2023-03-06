@@ -28,7 +28,6 @@ export default class LoginController {
   public async getUserRole(req:Request, res:Response)
     :Promise <Response> {
     const { id } = req.body;
-    console.log('HERE', id);
 
     const user = await this._loginService.getUser(id);
     if (!user) {

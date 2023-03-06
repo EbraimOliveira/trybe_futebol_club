@@ -22,10 +22,10 @@ export default class JwtValidator {
     if (!token) {
       return res.status(UNAUTHORIZED).json({ message: 'Token not found' });
     }
-    console.log('MY SECRET', this._secret);
 
     try {
-      const { userId } = await verify(token, this._secret) as JwtPayload; // as é um cast. interprete o resultado desse verify como sendo do tipo estipulado
+      const { userId } = await verify(token, this._secret) as JwtPayload;
+      // as é um cast. interprete o resultado desse verify como sendo do tipo estipulado
       req.body.id = userId;
     } catch (error) {
       return res.status(UNAUTHORIZED).json({ message: 'Token must be a valid token' });

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { BAD_REQUEST } from '../utils/statusCode';
+import { UNAUTHORIZED } from '../utils/statusCode';
 
 export default class UserValidator {
   public emailValidation = (req:Request, res:Response, next: NextFunction) => {
@@ -8,11 +8,11 @@ export default class UserValidator {
     const regex = /\S+@\S+\.\S+/;
     const verify = regex.test(email);
     if (!email) {
-      return res.status(BAD_REQUEST)
+      return res.status(UNAUTHORIZED)
         .json({ message: 'All fields must be filled' });
     }
     if (!verify) {
-      return res.status(BAD_REQUEST)
+      return res.status(UNAUTHORIZED)
         .json({ message: 'Invalid email or password' });
     }
     next();
@@ -22,11 +22,11 @@ export default class UserValidator {
     const { password } = req.body;
     const MIN = 6;
     if (!password) {
-      return res.status(BAD_REQUEST)
+      return res.status(UNAUTHORIZED)
         .json({ message: 'All fields must be filled' });
     }
     if (password.length < MIN) {
-      return res.status(BAD_REQUEST)
+      return res.status(UNAUTHORIZED)
         .json({ message: 'Invalid email or password' });
     }
     next();
