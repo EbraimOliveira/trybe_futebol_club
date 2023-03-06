@@ -18,19 +18,19 @@ const { expect } = chai;
 describe('Test teams entity integrations', ()=>{
    
   let chaiHttpResponse: Response; // a variável chai... vai ser do tipo response, que é um objeto com chave e valor.
-  afterEach(sinon.restore) // sempre que encerrar um teste restaura todos os mocks.
+  beforeEach(()=>sinon.restore()) // sempre que encerrar um teste restaura todos os mocks.
   
   it('Get all teams',async () => {
-    before(async () => 
-      { sinon.stub(Team, 'findAll').resolves(teamsFake)});  // o sinon.stub aqui indica que quando o metodo findaAll de Team for chamado ele deve acessar o teamsFake e não o DB
+   
+     sinon.stub(Team, 'findAll').resolves(teamsFake);  // o sinon.stub aqui indica que quando o metodo findaAll de Team for chamado ele deve acessar o teamsFake e não o DB
   
     chaiHttpResponse = await chai.request(app).get('/teams');
     expect(chaiHttpResponse.body).to.be.deep.equal(teamsFake); // espera-se que o retorno será do mesmo tipo que chai.body (any)
   })
 
   it('Get team by id',async () => {       
-    before(async () => 
-      { sinon.stub(Team, 'findByPk').resolves(teamsFake[0])})
+    
+      sinon.stub(Team, 'findByPk').resolves(teamsFake[0])
   
     chaiHttpResponse = await chai.request(app).get('/teams/1');
     expect(chaiHttpResponse.body).to.be.deep.equal(teamsFake[0]);

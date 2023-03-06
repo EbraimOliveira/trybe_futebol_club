@@ -2,13 +2,13 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
-import * as jwt from 'jsonwebtoken';
+// import * as jwt from 'jsonwebtoken';
 
 import { app } from '../app';
 
 import User from '../database/models/User';
 import { users } from './mocks';
-import { OK, UNAUTHORIZED } from '../utils/statusCode';
+import { BAD_REQUEST, OK, UNAUTHORIZED } from '../utils/statusCode';
 
 const usersFake = users; 
 chai.use(chaiHttp);
@@ -16,34 +16,29 @@ const { expect } = chai;
 
 describe('Test users entity integrations', async ()=>{
   
-  const TOKEN =  "jwt"
+  // const TOKEN =  "jwt"
    
   const user = {
     email: "user@user.com",
     password: "secret_user"
   }
   
-  afterEach(sinon.restore) 
+  beforeEach(()=>sinon.restore()) 
   
   it('Gera um token em caso de retorno true',async () => {
-    before(async () =>
-    {
-      sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
-      sinon.stub(jwt, 'sign' ).resolves(TOKEN);
-    });
+    
+    sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
+      // sinon.stub(jwt, 'sign' ).resolves(TOKEN);
+    
     const chaiHttpResponse = await chai.request(app).post('/login').send(user);
     expect(chaiHttpResponse.status).to.be.equal(OK);
-    expect(chaiHttpResponse.body).to.be.deep.equal( 
-      {
-      "token": TOKEN
-      }) 
+    expect(chaiHttpResponse.body).to.have.key("token") 
   })
 
   it('Gera mensagem de erro em caso de retorno null',async () => {
-    before(async () =>
-    {
-      sinon.stub(User, 'findOne' ).resolves(null);
-    });
+  
+    sinon.stub(User, 'findOne' ).resolves(null);
+    
     const chaiHttpResponse = await chai.request(app).post('/login').send(user);
     expect(chaiHttpResponse.status).to.be.equal(UNAUTHORIZED);
     expect(chaiHttpResponse.body).to.be.deep.equal( 
@@ -54,17 +49,19 @@ describe('Test users entity integrations', async ()=>{
 
   it('Ao fazer login sem o email retorna um erro', async () => {
   
+    sinon.stub(User, 'findOne' ).resolves(null);
     const response = await chai.request(app).post('/login').send({password: user.password})
 
-    expect(response.status).to.be.equal(UNAUTHORIZED);
-    expect(response.body).to.be.deep.equal({ message: 'Invalid email or password' })
+    expect(response.status).to.be.equal(BAD_REQUEST);
+    expect(response.body).to.be.deep.equal({ message: 'All fields must be filled' })
   })
 
   it('Ao fazer login sem o password retorna um erro', async () => {
   
+    sinon.stub(User, 'findOne' ).resolves(null);
     const response = await chai.request(app).post('/login').send({email: user.email})
 
-    expect(response.status).to.be.equal(UNAUTHORIZED);
+    expect(response.status).to.be.equal(BAD_REQUEST);
     expect(response.body).to.be.deep.equal({ message: 'All fields must be filled' })
   })
 
@@ -94,17 +91,21 @@ describe('Test users entity integrations', async ()=>{
 
   it('Exibe o role do usuario ao passar um token', async () => {
   
-     before(async () =>
-    {
-      sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
-      sinon.stub(jwt, 'verify' ).resolves(TOKEN);
-    });
-    const response = await chai.request(app).get('/login/role').set('authorization', TOKEN)
-    await chai.request(app).post('/login').send({id:2})
+   // sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
+  
+    const payload =  usersFake[1].id;
+    console.log('HERE>>>>>', payload, typeof payload);
+    
+    // sinon.stub(jwt, 'verify' ).callsFake(()=>payload); 
+    sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
+
+    // const response = await chai.request(app).get('/login/role').set('Authorization', TOKEN)
+    const response = await chai.request(app).get('/login/role').send({id,})
 
     expect(response.status).to.be.equal(OK);
-    expect(response.body).to.be.deep.equal(usersFake[1].role)
+    expect(response.body).to.be.deep.equal( {role:usersFake[1].role} )
   })
+
 })
 
 
@@ -114,8 +115,8 @@ describe('Test users entity integrations', async ()=>{
   //     password: "$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO",
   //     role: "user",
   //     username: "User",
-      // senha: secret_user
-  //   },
+ //      senha: secret_user
+  // },
 
                 
 
@@ -129,7 +130,7 @@ describe('Test users entity integrations', async ()=>{
 
 
 
-  
+
 
 //   it('Testa se o login com o usuário incorreto da erro', async () => {
 //     const user = {
