@@ -30,6 +30,7 @@ export default class LoginController {
     const { id } = req.body;
 
     const user = await this._loginService.getUser(id);
+
     if (!user) {
       return res.status(UNAUTHORIZED).json({ message: 'user Id not found' });
     }

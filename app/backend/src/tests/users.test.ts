@@ -2,13 +2,13 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
-import * as jwt from 'jsonwebtoken';
 
 import { app } from '../app';
 
 import User from '../database/models/User';
 import { users } from './mocks';
 import { BAD_REQUEST, OK, UNAUTHORIZED } from '../utils/statusCode';
+import JwtGenerator from '../utils/JwtGenerator';
 
 const usersFake = users; 
 chai.use(chaiHttp);
@@ -16,8 +16,10 @@ const { expect } = chai;
 
 describe('Test users entity integrations', async ()=>{
   
-  const TOKEN =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY3ODA2MTU0MiwiZXhwIjoxNjc4NjY2MzQyfQ.Iy8yBY5ReR_NAri0a7y_UJpAmjp8y6eq1m8g8PbRC4s"
-   
+  const userFake =  usersFake[1]
+  const JwtTest =  new JwtGenerator;
+  const TOKEN = JwtTest.tokenGenerator(userFake.id)
+  
   const user = {
     email: "user@user.com",
     password: "secret_user"
@@ -91,99 +93,33 @@ describe('Test users entity integrations', async ()=>{
 
   it('Exibe o role do usuario ao passar um token valido', async () => {
   
-   // sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
-  
-    const payload =  usersFake[1].id;
-    console.log('HERE>>>>>', payload, typeof payload);
-    
-    // sinon.stub(jwt, 'verify' ).callsFake(()=>payload); 
-    sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
+    sinon.stub(User, 'findOne' ).resolves(userFake);
 
-    const response = await chai.request(app).get('/login/role').set({'authorization': TOKEN})
-    // const response = await chai.request(app).get('/login/role').send({id: payload})
+    const response = await chai.request(app).get('/login/role').set({'Authorization': TOKEN}) 
 
     expect(response.status).to.be.equal(OK);
-    expect(response.body).to.be.deep.equal( {role:usersFake[1].role} )
+    expect(response.body).to.be.deep.equal( {role:userFake.role} )
   })
 
-  //  it('Exibe o role do usuario ao passar um token invalido', async () => {
-  
-  //   const payload =  usersFake[1].id;
-  //   sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
-  //   sinon.stub(jwt, 'verify' ).callsFake(()=>payload); 
+  it('Exibe um erro ao passar token invalido', async () => {
 
-  //   const response = await chai.request(app).get('/login/role').set({'authorization': TOKEN})
+    sinon.stub(User, 'findOne' ).resolves(userFake);
 
-  //   expect(response.status).to.be.equal(UNAUTHORIZED);
-  //   expect(response.body).to.be.deep.equal( {message: 'Token must be a valid token' } )
-  // })
+    const response = await chai.request(app).get('/login/role').set({'Authorization': `fail${TOKEN}`}) 
+
+    expect(response.status).to.be.equal(UNAUTHORIZED);
+    expect(response.body).to.be.deep.equal( {message: 'Token must be a valid token'} )
+  })
+
+  it('Exibe um erro ao nao passar token', async () => {
+
+    sinon.stub(User, 'findOne' ).resolves(userFake);
+
+    const response = await chai.request(app).get('/login/role').set({'Authorization': ''}) 
+
+    expect(response.status).to.be.equal(UNAUTHORIZED);
+    expect(response.body).to.be.deep.equal( { message: 'Token not found' } )
+  })
 })
 
-  //  {
-  //     email: "user@user.com",
-  //     id: 2,
-  //     password: "$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO",
-  //     role: "user",
-  //     username: "User",
- //      senha: secret_user
-  // },
 
-
-    //   const jwtPayload =  {data: { user: { id: 1} }, iat: 1678053337, exp: 1678658137 }
-
-    // sinon.stub(jwt, "verify").callsFake((token, secret)=>{
-    //   return jwtPayload;
-    // });
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-//   it('Testa se o login com o usuário incorreto da erro', async () => {
-//     const user = {
-//       email: "@admin.com",
-//       password: "secret"
-//     }
-//     const response = await chai.request(app).post('/login').send(user);
-
-//     expect(response.status).to.be.eq(401);
-//     expect(response.status).to.not.haveOwnProperty('token')
-//     expect(response.body).to.be.deep.equal({ message: 'Invalid email or password' })
-//   })
-
-//   it('Testa se o login somente com usuário da erro', async () => {
-//     const user = {
-//       email: "admisn@admin.com"
-//     }
-//     const response = await chai.request(app).post('/login').send(user);
-
-//     expect(response.status).to.be.eq(400);
-//     expect(response.body).to.be.deep.eq({ message: 'All fields must be filled' })
-//   })
-
-//   it('testa se ao usar a rota /login/role a role correta retorna', async () => {
-//     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIn0sImlhdCI6MTY3NzcwNDAwNH0.4ue0YNYPWEHbNiO5PvGgbnSLwlW7VxAu6JfFBFCueGU'
-//     const response = await chai.request(app).get('/login/role').set('authorization', token);
-
-//     expect(response.status).to.be.eq(200);
-//     expect(response.body).to.be.deep.eq({ role: 'admin' })
-//   })
-
-//   it('testa se ao usar a rota /login/role', async () => {
-//     const token = 'aeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIn0sImlhdCI6MTY3NzcwNDAwNH0.4ue0YNYPWEHbNiO5PvGgbnSLwlW7VxAu6JfFBFCueGU'
-//     const response = await chai.request(app).get('/login/role').set('authorization', token);
-
-//     expect(response.status).to.be.eq(401);
-//     expect(response.body).to.be.deep.eq({ message: "Token must be a valid token" })
-//   })
-// })
