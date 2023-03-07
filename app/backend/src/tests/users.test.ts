@@ -2,7 +2,7 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
-// import * as jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
 import { app } from '../app';
 
@@ -16,7 +16,7 @@ const { expect } = chai;
 
 describe('Test users entity integrations', async ()=>{
   
-  // const TOKEN =  "jwt"
+  const TOKEN =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY3ODA2MTU0MiwiZXhwIjoxNjc4NjY2MzQyfQ.Iy8yBY5ReR_NAri0a7y_UJpAmjp8y6eq1m8g8PbRC4s"
    
   const user = {
     email: "user@user.com",
@@ -89,7 +89,7 @@ describe('Test users entity integrations', async ()=>{
     expect(response.body).to.be.deep.equal({ message: 'Invalid email or password' })
   })
 
-  it('Exibe o role do usuario ao passar um token', async () => {
+  it('Exibe o role do usuario ao passar um token valido', async () => {
   
    // sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
   
@@ -99,15 +99,25 @@ describe('Test users entity integrations', async ()=>{
     // sinon.stub(jwt, 'verify' ).callsFake(()=>payload); 
     sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
 
-    // const response = await chai.request(app).get('/login/role').set('Authorization', TOKEN)
-    const response = await chai.request(app).get('/login/role').send({id,})
+    const response = await chai.request(app).get('/login/role').set({'authorization': TOKEN})
+    // const response = await chai.request(app).get('/login/role').send({id: payload})
 
     expect(response.status).to.be.equal(OK);
     expect(response.body).to.be.deep.equal( {role:usersFake[1].role} )
   })
 
-})
+  //  it('Exibe o role do usuario ao passar um token invalido', async () => {
+  
+  //   const payload =  usersFake[1].id;
+  //   sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
+  //   sinon.stub(jwt, 'verify' ).callsFake(()=>payload); 
 
+  //   const response = await chai.request(app).get('/login/role').set({'authorization': TOKEN})
+
+  //   expect(response.status).to.be.equal(UNAUTHORIZED);
+  //   expect(response.body).to.be.deep.equal( {message: 'Token must be a valid token' } )
+  // })
+})
 
   //  {
   //     email: "user@user.com",
@@ -117,6 +127,13 @@ describe('Test users entity integrations', async ()=>{
   //     username: "User",
  //      senha: secret_user
   // },
+
+
+    //   const jwtPayload =  {data: { user: { id: 1} }, iat: 1678053337, exp: 1678658137 }
+
+    // sinon.stub(jwt, "verify").callsFake((token, secret)=>{
+    //   return jwtPayload;
+    // });
 
                 
 

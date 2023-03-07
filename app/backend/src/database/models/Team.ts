@@ -25,6 +25,7 @@ Team.init({
   underscored: true,
   sequelize, // esse é a instância do Sequelize com o parâmetro das configurações de conexão.
   timestamps: false,
+  modelName: 'teams',
 });
 
 export default Team;

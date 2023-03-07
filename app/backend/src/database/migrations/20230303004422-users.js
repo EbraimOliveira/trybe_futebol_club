@@ -28,13 +28,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-    });
-
+    })
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
 
     await queryInterface.dropTable('users');
 
   }
-};
+}
