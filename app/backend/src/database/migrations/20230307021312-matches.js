@@ -17,7 +17,9 @@ module.exports = {
         references: {
           model: 'teams',
           key: 'id'
-        }
+        },
+        // onUpdate: 'CASCADE',
+        // onUpdate: 'CASCADE',
       },
       homeTeamGoals: {
         allowNull: false,
@@ -31,7 +33,9 @@ module.exports = {
         references: {
           model: 'teams',
           key: 'id'
-        }
+        },
+        // onUpdate: 'CASCADE',
+        // onUpdate: 'CASCADE',
       },
       awaiTeamGoals: {
         allowNull: false,
@@ -45,6 +49,9 @@ module.exports = {
       }
     })
   },
+
+  //Como funciona esse 'CASCADE'?
+  //Quando criamos uma chave estrangeira usando UPDATE CASCADE, as linhas de referência são atualizadas na tabela filha quando a linha referenciada é atualizada na tabela pai que possui uma chave primária.
 
   down: async (queryInterface) => {
 
