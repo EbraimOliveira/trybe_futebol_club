@@ -7,7 +7,7 @@ const associations = [
 ];
 
 export default class MatchesService {
-  public fetchMatchesInfo = async (inProgress:any):Promise<Match[]> => {
+  public fetchMatchesInfo = async (inProgress: string | undefined):Promise<Match[]> => {
     let matches:Array<Match>;
 
     const inProgressBoolean = (inProgress === 'true');
@@ -26,8 +26,11 @@ export default class MatchesService {
     return matches;
   };
 
-  public finishMatch = async (paramId:number) => Match
-    .update({ inProgress: false }, { where: { id: paramId } });
+  public finishMatch = async (id:number) => Match
+    .update({ inProgress: false }, { where: { id } });
+
+  public updateMatch = async (id:number, homeTeamGoals:number, awayTeamGoals:number) => Match
+    .update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
 }
 
 // Associations: da model Team quero usar o atributo 'teamName' de homeTeam (que foi definido na model Match).

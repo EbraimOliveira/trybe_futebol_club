@@ -13,7 +13,8 @@ export default class MatchesController {
     :Promise<Response> {
     const { inProgress } = req.query;
 
-    const matchesInfo = await this._matchesService.fetchMatchesInfo(inProgress);
+    const matchesInfo = await this._matchesService
+      .fetchMatchesInfo(inProgress as string | undefined);
     return res.status(OK).json(matchesInfo);
   }
 
@@ -23,7 +24,16 @@ export default class MatchesController {
 
     this._matchesService.finishMatch(Number(id));
     return res.status(OK).json({ message: 'Finished' });
-    // return res.status(OK).json(response);
+  }
+
+  public async updateMatch(req:Request, res:Response)
+    :Promise<Response> {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+
+    this._matchesService
+      .updateMatch(Number(id), Number(homeTeamGoals), Number(awayTeamGoals));
+    return res.status(OK).json({ message: 'Finished' });
   }
 }
 

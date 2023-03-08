@@ -18,5 +18,10 @@ router.patch(
   jwtValidator.tokenValidator,
   (req, res) => matchesController.finishMatch(req, res),
 );
+router.patch(
+  '/:id',
+  jwtValidator.tokenValidator,
+  (req, res) => matchesController.updateMatch(req, res),
+);
 
 export default router;
