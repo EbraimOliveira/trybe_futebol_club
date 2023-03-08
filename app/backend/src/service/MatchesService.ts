@@ -8,30 +8,29 @@ const associations = [
 
 export default class MatchesService {
   public fetchMatchesInfo = async (inProgress:any):Promise<Match[]> => {
-    let teams:Array<Match>;
+    let matches:Array<Match>;
 
     const inProgressBoolean = (inProgress === 'true');
-    console.log('HERE >>>>>>>>', inProgressBoolean, typeof inProgressBoolean);
-
     if (inProgress) {
-      teams = await Match.findAll(
+      matches = await Match.findAll(
         {
           where: { inProgress: inProgressBoolean },
           include: associations,
         },
       );
-      return teams;
+      return matches;
     }
-
-    teams = await Match.findAll(
+    matches = await Match.findAll(
       { include: associations },
     );
-
-    return teams;
+    return matches;
   };
+
+  public finishMatch = async (paramId:number) => Match
+    .update({ inProgress: false }, { where: { id: paramId } });
 }
 
-// Linha 10: da model Team quero usar o atributo 'teamName' de homeTeam (que foi definido na model Match).
+// Associations: da model Team quero usar o atributo 'teamName' de homeTeam (que foi definido na model Match).
 
 // A função fetchMatchesInfo recebe o param inProgress do req.body e é validada se existe.
 // No caso de não existir (!inProgress) retorna todas as partidas, sem filtros, que é o retorno default.
@@ -39,3 +38,18 @@ export default class MatchesService {
 // Caso exista, o inProgress recebe um 'true' ou 'false' na query e eu crio um bollean comparando esse retorno com uma string 'true' no inProgressBoolean
 // Então, dentro do if, comparo o boolean gerado com o dado da tabela, no campo inProgress, dentro do where.
 // Se o boolean gerado no inProgressBolean for false então o findAll do if retornará todas as partidas onde o campo inProgress é === false.
+
+//  {
+//     "id": 2,
+//     "homeTeamId": 9,
+//     "homeTeamGoals": 1,
+//     "awayTeamId": 14,
+//     "awayTeamGoals": 1,
+//     "inProgress": false,
+//     "homeTeam": {
+//       "teamName": "Internacional"
+//     },
+//     "awayTeam": {
+//       "teamName": "Santos"
+//     }
+//   }
