@@ -33,7 +33,7 @@ Match.init({
     type: INTEGER,
     field: 'away_team_id',
   },
-  awaiTeamGoals: {
+  awayTeamGoals: {
     allowNull: false,
     type: INTEGER,
     field: 'away_team_goals',

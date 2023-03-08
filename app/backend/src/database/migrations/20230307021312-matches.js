@@ -42,7 +42,7 @@ module.exports = {
           key: 'id'
         },
       },
-      awaiTeamGoals: {
+      awayTeamGoals: {
         allowNull: false,
         type: Sequelize.INTEGER,
         field: 'away_team_goals'
