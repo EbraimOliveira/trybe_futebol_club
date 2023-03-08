@@ -9,9 +9,10 @@ export default class MatchesController {
     this._matchesService = new MatchesService();
   }
 
-  public async fetchMatchesInfo(_req:Request, res:Response)
+  public async fetchMatchesInfo(req:Request, res:Response)
     :Promise<Response> {
-    const matchesInfo = await this._matchesService.fetchMatchesInfo();
+    const { inProgress } = req.query;
+    const matchesInfo = await this._matchesService.fetchMatchesInfo(inProgress);
     return res.status(OK).json(matchesInfo);
   }
 }

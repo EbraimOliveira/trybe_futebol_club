@@ -11,8 +11,6 @@ class Match extends Model {
   declare inProgress: boolean;
 }
 
-// Qual a diferença de implantar Interfaces aqui ^ ?
-
 Match.init({
   id: {
     allowNull: false,
@@ -24,10 +22,6 @@ Match.init({
     allowNull: false,
     type: INTEGER,
     field: 'home_team_id',
-    references: {
-      model: 'teams',
-      key: 'id',
-    },
   },
   homeTeamGoals: {
     allowNull: false,
@@ -38,10 +32,6 @@ Match.init({
     allowNull: false,
     type: INTEGER,
     field: 'away_team_id',
-    references: {
-      model: 'teams',
-      key: 'id',
-    },
   },
   awaiTeamGoals: {
     allowNull: false,
@@ -56,12 +46,15 @@ Match.init({
 
 }, {
   underscored: true,
-  timestamps: false,
+  timestamps: false, // remove a obrigatoriedade de utilizar os campos `createdAt` e `updatedAt`
   sequelize,
+  modelName: 'matches',
 });
 
-Team.hasMany(Match, { foreignKey: 'homeTeamId', as: 'matchesHome' });
 Match.belongsTo(Team, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+// Match pertence a Team e a fk homeTeamId (ex:7) será buscada na tabela teams e será chamda de homeTeam
 Match.belongsTo(Team, { foreignKey: 'awayTeamId', as: 'awayTeam' });
 
 export default Match;
+
+// README: Você deverá definir os relacionamentos para homeTeam e awayTeam somente na model de partidas

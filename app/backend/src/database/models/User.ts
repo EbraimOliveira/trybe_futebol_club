@@ -40,6 +40,7 @@ User.init({
   underscored: true,
   sequelize,
   timestamps: false,
+  modelName: 'users',
 });
 
 export default User;
