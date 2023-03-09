@@ -3,7 +3,7 @@ import sequelize from '.';
 import Team from './Team';
 
 class Match extends Model {
-  declare id: number;
+  declare id?: number;
   declare homeTeamId: number;
   declare homeTeamGoals: number;
   declare awayTeamId: number;

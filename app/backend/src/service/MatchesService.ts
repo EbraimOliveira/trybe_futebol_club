@@ -34,7 +34,13 @@ export default class MatchesService {
 
   public newMatch = async (body: Match) => {
     let response: Match | string;
+    // delete body.id;
+    const { id, ...myBody } = body;
 
+    if (body.awayTeamId === body.homeTeamId) {
+      response = 'sameTeam';
+      return response;
+    }
     const homeTeam = await Team.findByPk(body.homeTeamId);
     const awayTeam = await Team.findByPk(body.awayTeamId);
 
@@ -42,11 +48,7 @@ export default class MatchesService {
       response = 'nonexistent';
       return response;
     }
-    if (homeTeam === awayTeam) {
-      response = 'sameTeam';
-      return response;
-    }
-    response = await Match.create({ ...body, inProgress: true });
+    response = await Match.create({ ...myBody, inProgress: true });
     return response;
   };
 }
@@ -59,3 +61,5 @@ export default class MatchesService {
 // Caso exista, o inProgress recebe um 'true' ou 'false' na query e eu crio um bollean comparando esse retorno com uma string 'true' no inProgressBoolean
 // Então, dentro do if, comparo o boolean gerado com o dado da tabela, no campo inProgress, dentro do where.
 // Se o boolean gerado no inProgressBolean for false então o findAll do if retornará todas as partidas onde o campo inProgress é === false.
+
+// O delete body.id foi necessario porque o id estava sendo salvo no body quando valida o jwt, poreḿ o LINT reclamou e substitui pela desconstrução do objeto, excluindo o id e armazendo o resto das informações no MyBody.

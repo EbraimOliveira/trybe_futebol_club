@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import { UNAUTHORIZED } from '../utils/statusCode';
 
 type JwtPayload = {
-  userId: string;
+  userId: string
 };
 
 const { verify } = jwt;
