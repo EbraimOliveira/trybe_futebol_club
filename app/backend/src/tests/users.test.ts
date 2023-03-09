@@ -2,20 +2,19 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
+chai.use(chaiHttp);
+const { expect } = chai;
 
 import { app } from '../app';
-
 import User from '../database/models/User';
 import { users } from './mocks';
 import { BAD_REQUEST, OK, UNAUTHORIZED } from '../utils/statusCode';
 import JwtGenerator from '../utils/JwtGenerator';
 
-const usersFake = users; 
-chai.use(chaiHttp);
-const { expect } = chai;
 
 describe('Test users entity integrations', async ()=>{
   
+  const usersFake = users; 
   const userFake =  usersFake[1]
   const JwtTest =  new JwtGenerator;
   const TOKEN = JwtTest.tokenGenerator(userFake.id)
@@ -30,8 +29,7 @@ describe('Test users entity integrations', async ()=>{
   it('Gera um token em caso de retorno true',async () => {
     
     sinon.stub(User, 'findOne' ).resolves(usersFake[1]);
-      // sinon.stub(jwt, 'sign' ).resolves(TOKEN);
-    
+
     const chaiHttpResponse = await chai.request(app).post('/login').send(user);
     expect(chaiHttpResponse.status).to.be.equal(OK);
     expect(chaiHttpResponse.body).to.have.key("token") 

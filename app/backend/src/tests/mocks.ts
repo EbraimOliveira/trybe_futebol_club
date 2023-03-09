@@ -1,5 +1,6 @@
 import Team from "../database/models/Team"
 import User from "../database/models/User"
+import Match from "../database/models/Match";
 
 export const users = [
     {
@@ -39,7 +40,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 8,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 2,
@@ -47,7 +48,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 14,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 3,
@@ -55,7 +56,7 @@ export const  matches = [
       homeTeamGoals: 3,
       awayTeamId: 11,
       awayTeamGoals: 0,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 4,
@@ -63,7 +64,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 2,
       awayTeamGoals: 0,
-      inProgress: 0,
+      inProgress: true,
     },
     {
       id: 5,
@@ -71,7 +72,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 10,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: true,
     },
     {
       id: 6,
@@ -79,7 +80,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 13,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: true,
     },
     {
       id: 7,
@@ -87,7 +88,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 6,
       awayTeamGoals: 2,
-      inProgress: 0,
+      inProgress: true,
     },
     {
       id: 8,
@@ -95,7 +96,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 1,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: true,
     },
     {
       id: 9,
@@ -103,7 +104,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 12,
       awayTeamGoals: 3,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 10,
@@ -111,7 +112,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 9,
       awayTeamGoals: 2,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 11,
@@ -119,7 +120,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 3,
       awayTeamGoals: 0,
-      inProgress: 0,
+      inProgress: true,
     },
     {
       id: 12,
@@ -127,7 +128,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 4,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 13,
@@ -135,7 +136,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 5,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: true,
     },
     {
       id: 14,
@@ -143,7 +144,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 16,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 15,
@@ -151,7 +152,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 15,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 16,
@@ -159,7 +160,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 7,
       awayTeamGoals: 0,
-      inProgress: 0,
+      inProgress: true,
     },
     {
       id: 17,
@@ -167,7 +168,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 8,
       awayTeamGoals: 3,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 18,
@@ -175,7 +176,7 @@ export const  matches = [
       homeTeamGoals: 4,
       awayTeamId: 5,
       awayTeamGoals: 2,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 19,
@@ -183,7 +184,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 2,
       awayTeamGoals: 2,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 20,
@@ -191,7 +192,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 9,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 21,
@@ -199,7 +200,7 @@ export const  matches = [
       homeTeamGoals: 3,
       awayTeamId: 13,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 22,
@@ -207,7 +208,7 @@ export const  matches = [
       homeTeamGoals: 3,
       awayTeamId: 3,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 23,
@@ -215,7 +216,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 16,
       awayTeamGoals: 3,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 24,
@@ -223,7 +224,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 14,
       awayTeamGoals: 2,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 25,
@@ -231,7 +232,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 6,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 26,
@@ -239,7 +240,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 1,
       awayTeamGoals: 0,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 27,
@@ -247,7 +248,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 15,
       awayTeamGoals: 2,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 28,
@@ -255,7 +256,7 @@ export const  matches = [
       homeTeamGoals: 3,
       awayTeamId: 7,
       awayTeamGoals: 0,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 29,
@@ -263,7 +264,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 4,
       awayTeamGoals: 4,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 30,
@@ -271,7 +272,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 12,
       awayTeamGoals: 4,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 31,
@@ -279,7 +280,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 10,
       awayTeamGoals: 0,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 32,
@@ -287,7 +288,7 @@ export const  matches = [
       homeTeamGoals: 5,
       awayTeamId: 11,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 33,
@@ -295,7 +296,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 16,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 34,
@@ -303,7 +304,7 @@ export const  matches = [
       homeTeamGoals: 3,
       awayTeamId: 6,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 35,
@@ -311,7 +312,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 5,
       awayTeamGoals: 3,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 36,
@@ -319,7 +320,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 7,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 37,
@@ -327,7 +328,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 13,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 38,
@@ -335,7 +336,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 4,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 39,
@@ -343,7 +344,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 11,
       awayTeamGoals: 0,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 40,
@@ -351,7 +352,7 @@ export const  matches = [
       homeTeamGoals: 4,
       awayTeamId: 8,
       awayTeamGoals: 1,
-      inProgress: 0,
+      inProgress: false,
     },
     {
       id: 41,
@@ -359,7 +360,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 9,
       awayTeamGoals: 0,
-      inProgress: 1,
+      inProgress: false,
     },
     {
       id: 42,
@@ -367,7 +368,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 1,
       awayTeamGoals: 0,
-      inProgress: 1,
+      inProgress: false,
     },
     {
       id: 43,
@@ -375,7 +376,7 @@ export const  matches = [
       homeTeamGoals: 0,
       awayTeamId: 10,
       awayTeamGoals: 0,
-      inProgress: 1,
+      inProgress: false,
     },
     {
       id: 44,
@@ -383,7 +384,7 @@ export const  matches = [
       homeTeamGoals: 2,
       awayTeamId: 15,
       awayTeamGoals: 2,
-      inProgress: 1,
+      inProgress: false,
     },
     {
       id: 45,
@@ -391,7 +392,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 3,
       awayTeamGoals: 1,
-      inProgress: 1,
+      inProgress: false,
     },
     {
       id: 46,
@@ -399,7 +400,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 12,
       awayTeamGoals: 1,
-      inProgress: 1,
+      inProgress: false,
     },
     {
       id: 47,
@@ -407,7 +408,7 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 14,
       awayTeamGoals: 2,
-      inProgress: 1,
+      inProgress: false,
     },
     {
       id: 48,
@@ -415,9 +416,9 @@ export const  matches = [
       homeTeamGoals: 1,
       awayTeamId: 2,
       awayTeamGoals: 1,
-      inProgress: 1,
+      inProgress: false,
     },
-  ]
+  ] as Match[]
 
 export const teams = [
   { id: 1, teamName: 'Avaí/Kindermann' },

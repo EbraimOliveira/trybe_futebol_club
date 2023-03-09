@@ -2,30 +2,31 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
-
-import { app } from '../app';
-// import Example from '../database/models/ExampleModel';
-
-import { Response } from 'superagent';
-
-import Team from '../database/models/Team';
-import { teams } from './mocks';
-const teamsFake = teams;
-
 chai.use(chaiHttp);
 const { expect } = chai;
 
+import { app } from '../app';
+import { Response } from 'superagent';
+import Team from '../database/models/Team';
+import { teams } from './mocks';
+
+
 describe('Test teams entity integrations', ()=>{
-   
-  let chaiHttpResponse: Response; // a variável chai... vai ser do tipo response, que é um objeto com chave e valor.
-  beforeEach(()=>sinon.restore()) // sempre que encerrar um teste restaura todos os mocks.
+  
+  const teamsFake = teams;
+  // a variável chai... vai ser do tipo response, que é um objeto com chave e valor.
+  let chaiHttpResponse: Response; 
+  // sempre que encerrar um teste restaura todos os mocks.
+  beforeEach(()=>sinon.restore()) 
   
   it('Get all teams',async () => {
-   
-     sinon.stub(Team, 'findAll').resolves(teamsFake);  // o sinon.stub aqui indica que quando o metodo findaAll de Team for chamado ele deve acessar o teamsFake e não o DB
+
+    // o sinon.stub aqui indica que quando o metodo findaAll de Team for chamado ele deve acessar o teamsFake e não o DB
+     sinon.stub(Team, 'findAll').resolves(teamsFake); 
   
     chaiHttpResponse = await chai.request(app).get('/teams');
-    expect(chaiHttpResponse.body).to.be.deep.equal(teamsFake); // espera-se que o retorno será do mesmo tipo que chai.body (any)
+    // espera-se que o retorno será do mesmo tipo que chai.body (any)
+    expect(chaiHttpResponse.body).to.be.deep.equal(teamsFake); 
   })
 
   it('Get team by id',async () => {       
