@@ -77,7 +77,7 @@ describe('Test matches entity integrations', async ()=>{
     expect(response.status).to.be.equal(OK)
     expect(response.body).to.be.deep.equal(
       {
-        message: 'Easter'
+        message: 'Finished'
       })
  
   })

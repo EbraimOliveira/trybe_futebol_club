@@ -99,6 +99,25 @@ describe('Test users entity integrations', async ()=>{
     expect(response.body).to.be.deep.equal( {role:userFake.role} )
   })
 
+  it('Erro ao passar um id invalido', async () => {
+  
+    sinon.stub(User, 'findOne' ).resolves(undefined);
+
+    const response = await chai.request(app)
+    .get('/login/role')
+    .set({'Authorization': TOKEN})
+    .send(
+      {
+        email: "string",
+        password: "string",
+        id: '333333'
+      })
+
+    expect(response.status).to.be.equal(UNAUTHORIZED);
+    expect(response.body).to.be.deep.equal( {message: 'user Id not found'} )
+  })
+
+
   it('Exibe um erro ao passar token invalido', async () => {
 
     sinon.stub(User, 'findOne' ).resolves(userFake);
