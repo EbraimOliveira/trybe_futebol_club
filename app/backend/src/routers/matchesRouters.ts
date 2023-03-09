@@ -23,5 +23,10 @@ router.patch(
   jwtValidator.tokenValidator,
   (req, res) => matchesController.updateMatch(req, res),
 );
+router.post(
+  '/',
+  jwtValidator.tokenValidator,
+  (req, res) => matchesController.newMatch(req, res),
+);
 
 export default router;

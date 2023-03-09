@@ -31,6 +31,24 @@ export default class MatchesService {
 
   public updateMatch = async (id:number, homeTeamGoals:number, awayTeamGoals:number) => Match
     .update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+
+  public newMatch = async (body: Match) => {
+    let response: Match | string;
+
+    const homeTeam = await Team.findByPk(body.homeTeamId);
+    const awayTeam = await Team.findByPk(body.awayTeamId);
+
+    if (!homeTeam || !awayTeam) {
+      response = 'nonexistent';
+      return response;
+    }
+    if (homeTeam === awayTeam) {
+      response = 'sameTeam';
+      return response;
+    }
+    response = await Match.create({ ...body, inProgress: true });
+    return response;
+  };
 }
 
 // Associations: da model Team quero usar o atributo 'teamName' de homeTeam (que foi definido na model Match).
@@ -41,18 +59,3 @@ export default class MatchesService {
 // Caso exista, o inProgress recebe um 'true' ou 'false' na query e eu crio um bollean comparando esse retorno com uma string 'true' no inProgressBoolean
 // Então, dentro do if, comparo o boolean gerado com o dado da tabela, no campo inProgress, dentro do where.
 // Se o boolean gerado no inProgressBolean for false então o findAll do if retornará todas as partidas onde o campo inProgress é === false.
-
-//  {
-//     "id": 2,
-//     "homeTeamId": 9,
-//     "homeTeamGoals": 1,
-//     "awayTeamId": 14,
-//     "awayTeamGoals": 1,
-//     "inProgress": false,
-//     "homeTeam": {
-//       "teamName": "Internacional"
-//     },
-//     "awayTeam": {
-//       "teamName": "Santos"
-//     }
-//   }
