@@ -9,6 +9,6 @@ const leaderboardController = new LeaderboardController();
 // const jwtGenerator = new JwtGenerator();
 // const jwtValidator = new JwtValidator(jwtGenerator.secret);
 
-router.get('/home', (req, res)=>leaderboardController.TEST(req, res))
+router.get('/home', (req, res) => leaderboardController.finishedMatches(req, res));
 
 export default router;
