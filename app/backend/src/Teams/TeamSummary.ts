@@ -1,5 +1,5 @@
 export default class TeamSummary {
-  private _name: string | number;
+  private _name: string;
   private _totalPoints: number;
   private _totalGames: number;
   private _totalVictories: number;
@@ -10,7 +10,7 @@ export default class TeamSummary {
   private _goalsBalance:number;
   private _efficiency: number;
 
-  constructor(name:string | number) {
+  constructor(name:string) {
     this._name = name;
     this._totalPoints = 0;
     this._totalGames = 0;
@@ -23,16 +23,8 @@ export default class TeamSummary {
     this._efficiency = 0;
   }
 
-  public set name(param:number) {
-    this._name = param;
-  }
-
-  public set goalsFavor(param:number) {
-    this._goalsFavor = param;
-  }
-
-  public set goalsOwn(param:number) {
-    this._goalsOwn = param;
+  public get name() {
+    return this._name;
   }
 
   private goalsBalance() {
@@ -67,15 +59,13 @@ export default class TeamSummary {
     this._totalPoints += 1;
   }
 
-  private findResult(goalsFavor: number, goalsOwn: number) {
+  private static findResult(goalsFavor: number, goalsOwn: number) {
     if (goalsFavor > goalsOwn) {
       return 'win';
     }
-
     if (goalsFavor < goalsOwn) {
       return 'lose';
     }
-
     return 'draw';
   }
 
@@ -86,7 +76,7 @@ export default class TeamSummary {
       draw: () => this.setDraw(),
     };
 
-    const result = this.findResult(goalsFavor, goalsOwn);
+    const result = TeamSummary.findResult(goalsFavor, goalsOwn);
     resultCases[result]();
     this.always(goalsFavor, goalsOwn);
   }

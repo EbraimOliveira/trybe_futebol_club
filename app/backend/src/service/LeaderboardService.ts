@@ -1,50 +1,76 @@
 import TeamSummary from '../Teams/TeamSummary';
 import Match from '../database/models/Match';
-// import Team from '../database/models/Team';
+import TeamsService from './TeamsService';
 
-// const associations = [
-//   { model: Team, as: 'homeTeam', attributes: ['teamName'] },
-//   { model: Team, as: 'awayTeam', attributes: ['teamName'] },
-// ];
+type match = {
+  homeTeamId: number,
+  homeTeamGoals: number,
+  awayTeamId: number,
+  awayTeamGoals: number
+};
 
 export default class LeaderboardService {
-  public finishedMatches = async ():Promise<Array<Match> | any> => {
+  public _teamsStatusList: Array<TeamSummary>;
+  private _teamService: TeamsService;
+
+  constructor() {
+    this._teamsStatusList = [];
+    this._teamService = new TeamsService();
+  }
+
+  private finishedMatches = async ():Promise<Array<match>> => {
     const closedMatches = await Match
       .findAll(
         {
           where: { inProgress: false },
           attributes: { exclude: ['id', 'inProgress'] },
-          // include: associations,
         },
       );
 
-    console.log('HERE>.......', closedMatches); // pq tem um retorno no log e outro na hof ?
-
-    const newList = closedMatches.map((match) => {
-      const homeTeamSummary = new TeamSummary(`name_${match.homeTeamId}`);
-      homeTeamSummary.update(match.homeTeamGoals, match.awayTeamGoals);
-      // const awayTeamSummary = new TeamSummary(`name_${match.awayTeamId}`);
-      // awayTeamSummary.update(match.homeTeamGoals, match.awayTeamGoals);
-      return homeTeamSummary;
-    });
-
-    // const newNewList = newList.reduce((acc, time)=>{
-    //   const teamSummary2 = new TeamSummary(`name_${time.name}`);
-    //   teamSummary2.update(time.goalsFavor, time.goalsOwn);
-    //   return teamSummary2;
-    // },{})
-
-    return newList;
-    // return closedMatches;
+    return closedMatches;
   };
+
+  public async setTeamStatus() {
+    const matches = await this.finishedMatches();
+    const teamsNames = await this._teamService.findAll();
+
+    matches.forEach((match) => {
+      const hasTeam = this._teamsStatusList
+        .find((team) => team.name === teamsNames[match.homeTeamId - 1].teamName);
+
+      if (!hasTeam) {
+        const homeTeamSummary = new TeamSummary(teamsNames[match.homeTeamId - 1].teamName);
+        homeTeamSummary.update(match.homeTeamGoals, match.awayTeamGoals);
+        this._teamsStatusList.push(homeTeamSummary);
+      }
+
+      if (hasTeam) {
+        hasTeam.update(match.homeTeamGoals, match.awayTeamGoals);
+      }
+    });
+    return this._teamsStatusList;
+  }
 }
 
-//   {
-//     "homeTeamId": 16,
-//     "homeTeamGoals": 1,
-//     "awayTeamId": 8,
-//     "awayTeamGoals": 1
-//   },
+// const response = this.mathhees.map((match) => {
+
+//   const summaryExists = teams.find((team) => {
+//     team.name === `name_${match.homeTeamId}`;
+//   });
+
+//   if (!summaryExists) {
+//     const homeTeamSummary = new TeamSummary(`name_${match.homeTeamId}`);
+//     homeTeamSummary.update(match.homeTeamGoals, match.awayTeamGoals);
+
+//     teams.push(homeTeamSummary);
+//   }
+//   if(summaryExists)
+//   summaryExists.update(match.homeTeamGoals, match.awayTeamGoals);
+//   return this.response
+// });
+
+// return newList;
+// return closedMatches;
 
 // ..........................................................................................
 // GREIN:

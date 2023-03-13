@@ -9,7 +9,7 @@ export default class LeaderboardController {
   }
 
   public async finishedMatches(_req: Request, res:Response) {
-    const response = await this._leaderboardService.finishedMatches();
+    const response = await this._leaderboardService.setTeamStatus();
     return res.status(OK).json(response);
   }
 }
