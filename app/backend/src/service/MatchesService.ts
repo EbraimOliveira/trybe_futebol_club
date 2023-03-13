@@ -49,7 +49,7 @@ export default class MatchesService {
       return response;
     }
     response = await Match.create({ ...myBody, inProgress: true });
-    return response;
+    return 'success';
   };
 }
 

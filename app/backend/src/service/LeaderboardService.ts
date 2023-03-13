@@ -1,4 +1,11 @@
+import TeamSummary from '../Teams/TeamSummary';
 import Match from '../database/models/Match';
+// import Team from '../database/models/Team';
+
+// const associations = [
+//   { model: Team, as: 'homeTeam', attributes: ['teamName'] },
+//   { model: Team, as: 'awayTeam', attributes: ['teamName'] },
+// ];
 
 export default class LeaderboardService {
   public finishedMatches = async ():Promise<Array<Match> | any> => {
@@ -7,87 +14,67 @@ export default class LeaderboardService {
         {
           where: { inProgress: false },
           attributes: { exclude: ['id', 'inProgress'] },
+          // include: associations,
         },
       );
 
-    const objetosComTodosOsDados = closedMatches.map((match) => {
-      if (match.homeTeamGoals > match.awayTeamGoals) {
-        const matchCompleto = {
-          name: match.homeTeamId,
-          totalPoints: 3,
-          totalGames: 1,
-          totalVictories: 1,
-          totalDraws: 0,
-          totalLosses: 0,
-          goalsFavor: match.homeTeamGoals,
-          goalsOwn: match.awayTeamGoals,
-        };
-        return matchCompleto;
-      }
+    console.log('HERE>.......', closedMatches); // pq tem um retorno no log e outro na hof ?
 
-      if (match.homeTeamGoals < match.awayTeamGoals) {
-        const matchCompleto = {
-          name: match.awayTeamId,
-          totalPoints: 3,
-          totalGames: 1,
-          totalVictories: 1,
-          totalDraws: 0,
-          totalLosses: 0,
-          goalsFavor: match.awayTeamGoals,
-          goalsOwn: match.homeTeamGoals,
-        };
-        return matchCompleto;
-      }
-
-      if (match.homeTeamGoals === match.awayTeamGoals) {
-        const matchCompleto = {
-          name: [match.awayTeamId, match.homeTeamId],
-          totalPoints: 1,
-          totalGames: 1,
-          totalVictories: 0,
-          totalDraws: 1,
-          totalLosses: 0,
-          goalsFavor: match.awayTeamGoals,
-          goalsOwn: match.homeTeamGoals,
-        };
-        return matchCompleto;
-      }
+    const newList = closedMatches.map((match) => {
+      const homeTeamSummary = new TeamSummary(`name_${match.homeTeamId}`);
+      homeTeamSummary.update(match.homeTeamGoals, match.awayTeamGoals);
+      // const awayTeamSummary = new TeamSummary(`name_${match.awayTeamId}`);
+      // awayTeamSummary.update(match.homeTeamGoals, match.awayTeamGoals);
+      return homeTeamSummary;
     });
 
-    return objetosComTodosOsDados;
+    // const newNewList = newList.reduce((acc, time)=>{
+    //   const teamSummary2 = new TeamSummary(`name_${time.name}`);
+    //   teamSummary2.update(time.goalsFavor, time.goalsOwn);
+    //   return teamSummary2;
+    // },{})
 
+    return newList;
     // return closedMatches;
   };
 }
 
-// if( homeTeamGoals > awayTeamGoals) {
-//    - name = name
-//     totalPoints = totalPoints + 3
-//     totalGames = totalGames +1
-//     totalVictories = totalVictories +1
-//     totalDraws = totalDraws
-//     totalLosses = totalLosses
-//     goalsFavor = goalsFavor + homeTeamGoals
-//     goalsOwn = goalsOwn + awayTeamGoals
-//     goalsBalance = GoalBalance(goalsFavor, goalsOwn)
-//     efficiency = Efficiency(totalPoints,totalGames)
+//   {
+//     "homeTeamId": 16,
+//     "homeTeamGoals": 1,
+//     "awayTeamId": 8,
+//     "awayTeamGoals": 1
+//   },
+
+// ..........................................................................................
+// GREIN:
+// const newList:any = [];
+//   closedMatches.forEach((match)=>{
+//       const goalsFavor = match.homeTeamGoals;
+//       const goalsOwn = match.awayTeamGoals;
+
+//       const home = new TeamSummary(`name_${match.homeTeamId}`)
+//       const away = new TeamSummary(`name_${match.awayTeamId}`)
+
+//       home.totalPoints = match.homeTeamGoals;
+//       home.goalsFavor = match.homeTeamGoals;
+//       away.totalPoints = match.awayTeamGoals;
+//       away.goalsFavor = match.awayTeamGoals;
+
+//      const result = goalsFavor > goalsOwn ? 'win' : (goalsFavor < goalsOwn ? 'lose' : 'draw');
+//       switch (result) {
+//     case 'win': {
+//       home.totalVicotories = 1;
+//       home.totalPoints = 3;
+//       away.totalLosses = 1;
+//     }
+//     case 'lose': {
+//       this._totalLosses += 1;
+//     }
+//     default: {
+//       this._totalDraws += 1;
+//       this._totalPoints += 1;
+//     }
 //   }
-
-// function Efficiency(points:number, matches:number) {
-//   const efficiency = ((points / (matches * 3)) * 100).toFixed(2);
-//   console.log(efficiency);
-//   return efficiency;
-// }
-
-//  function GoalsBalance(homeTeamGoals:number,awayTeamGoals:number) {
-//   const goalsBalance = homeTeamGoals - awayTeamGoals
-//   console.log(goalsBalance);
-//   return goalsBalance;
-//  }
-
-// {
-//   "homeTeamId": 16,
-//   "homeTeamGoals": 1,
-//   "awayTeamId": 8,
-//   "awayTeamGoals": 1
-// },
+//       newList.push(home, away)
+//     })
