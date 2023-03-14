@@ -64,7 +64,7 @@ export default class MatchesController {
         return res.status(UNPROCESSABLE_ENTITY)
           .json({ message: 'It is not possible to create a match with two equal teams' });
       default:
-        return res.status(CREATED).json('success');
+        return res.status(CREATED).json(response);
     }
 
     // const setStatus = {
