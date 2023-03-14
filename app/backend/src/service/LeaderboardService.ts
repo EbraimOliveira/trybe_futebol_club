@@ -34,6 +34,14 @@ export default class LeaderboardService {
     const matches = await this.finishedMatches();
     const teamsNames = await this._teamService.findAll();
 
+    // matches é um array com os objetos abaixo:
+    // {
+    // homeTeamId: 16,
+    // awayTeamId: 8,
+    // homeTeamGoals: 2,
+    // awayTeamGoals: 2,
+    // }
+
     matches.forEach((match) => {
       const hasTeam = this._teamsSummary
         .find((team) => team.teamName
@@ -53,35 +61,39 @@ export default class LeaderboardService {
     return this._teamsSummary;
   }
 
+  private static sortByGoalsOwn(a: TeamSummary, b:TeamSummary) {
+    return a.myGoalsOwn - b.myGoalsOwn;
+  }
+
   private static sortByGoalsFavor(a: TeamSummary, b:TeamSummary) {
     const byGoals = b.myGoals - a.myGoals;
+    if (byGoals === 0) {
+      return LeaderboardService.sortByGoalsOwn(a, b);
+    }
     return byGoals;
   }
 
   private static sortByGoalsBalance(a: TeamSummary, b:TeamSummary) {
     const byBalace = b.balance - a.balance;
     if (byBalace === 0) {
-      LeaderboardService.sortByGoalsFavor(a, b);
+      return LeaderboardService.sortByGoalsFavor(a, b);
     }
-
     return byBalace;
   }
 
   private static sortByVictories(a: TeamSummary, b:TeamSummary) {
     const byVictories = b.victories - a.victories;
     if (byVictories === 0) {
-      LeaderboardService.sortByGoalsBalance(a, b);
+      return LeaderboardService.sortByGoalsBalance(a, b);
     }
-
     return byVictories;
   }
 
-  private static applySort(a: TeamSummary, b:TeamSummary) {
+  private static sortByPoints(a: TeamSummary, b:TeamSummary) {
     const byPoint = b.points - a.points;
     if (byPoint === 0) {
-      LeaderboardService.sortByVictories(a, b);
+      return LeaderboardService.sortByVictories(a, b);
     }
-
     return byPoint;
   }
 
@@ -89,7 +101,7 @@ export default class LeaderboardService {
     const leaderBoard = await this.getTeamStatus();
 
     const ordenedLeaderBoard = leaderBoard
-      .sort(LeaderboardService.applySort);
+      .sort(LeaderboardService.sortByPoints);
 
     return ordenedLeaderBoard;
   }

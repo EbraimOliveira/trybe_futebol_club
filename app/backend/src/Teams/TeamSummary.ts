@@ -43,6 +43,10 @@ export default class TeamSummary {
     return this.goalsFavor;
   }
 
+  public get myGoalsOwn() {
+    return this.goalsOwn;
+  }
+
   private GoalsBalance() {
     this.goalsBalance = this.goalsFavor - this.goalsOwn;
   }
@@ -98,23 +102,4 @@ export default class TeamSummary {
   }
 }
 
-// ........................................................................................
 //  o metodo upadte acima substtui o switch case (abaixo) pois evita percorrer todas as opções sempre e acessa apenas a que for pertinente.
-
-// public update( goalsFavor: number, goalsOwn: number ) {
-//   const result = goalsFavor > goalsOwn ? 'win' : (goalsFavor < goalsOwn ? 'lose' : 'draw');
-//   switch (result) {
-//     case 'win': {
-//       this.totalVictories += 1;
-//       this.totalPoints += 3;
-//     }
-//     case 'lose': {
-//       this._totalLosses + 1;
-//     }
-//     default: {
-//       this._totalDraws += 1;
-//       this.totalPoints += ;
-//     }
-//   }
-//   this.always(goalsFavor, goalsOwn);
-// }
