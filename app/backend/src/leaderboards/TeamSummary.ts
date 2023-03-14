@@ -102,4 +102,4 @@ export default class TeamSummary {
   }
 }
 
-//  o metodo upadte acima substtui o switch case (abaixo) pois evita percorrer todas as opções sempre e acessa apenas a que for pertinente.
+//  o metodo upadte acima substitui o switch case pois evita percorrer todas as opções sempre e acessa apenas a que for pertinente.

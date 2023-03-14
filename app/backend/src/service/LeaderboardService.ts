@@ -1,4 +1,4 @@
-import TeamSummary from '../Teams/TeamSummary';
+import TeamSummary from '../leaderboards/TeamSummary';
 import Match from '../database/models/Match';
 import TeamsService from './TeamsService';
 
@@ -12,10 +12,16 @@ type match = {
 export default class LeaderboardService {
   public _teamsSummary: Array<TeamSummary>;
   private _teamService: TeamsService;
+  private _id: string;
 
   constructor() {
     this._teamsSummary = [];
     this._teamService = new TeamsService();
+    this._id = 'homeTeamId';
+  }
+
+  public set setId(id:string) {
+    this._id = id;
   }
 
   private finishedMatches = async ():Promise<Array<match>> => {
@@ -30,34 +36,24 @@ export default class LeaderboardService {
     return closedMatches;
   };
 
-  private async getTeamStatus() {
+  private async createLeaderBoard() {
     const matches = await this.finishedMatches();
-    const teamsNames = await this._teamService.findAll();
-
-    // matches é um array com os objetos abaixo:
-    // {
-    // homeTeamId: 16,
-    // awayTeamId: 8,
-    // homeTeamGoals: 2,
-    // awayTeamGoals: 2,
-    // }
-
+    const T = await this._teamService.findAll();
     matches.forEach((match) => {
-      const hasTeam = this._teamsSummary
-        .find((team) => team.teamName
-        === teamsNames[match.homeTeamId - 1].teamName);
-
+      let thisId = match.homeTeamId;
+      let homeGoals = match.homeTeamGoals;
+      let awayGoals = match.awayTeamGoals;
+      if (this._id === 'awayTeamId') {
+        thisId = match.awayTeamId; homeGoals = match.awayTeamGoals; awayGoals = match.homeTeamGoals;
+      }
+      const hasTeam = this._teamsSummary.find((team) => team.teamName === T[thisId - 1].teamName);
       if (!hasTeam) {
-        const homeTeamSummary = new TeamSummary(
-          teamsNames[match.homeTeamId - 1].teamName,
-        );
-        homeTeamSummary.update(match.homeTeamGoals, match.awayTeamGoals);
+        const homeTeamSummary = new TeamSummary(T[thisId - 1].teamName);
+        homeTeamSummary.update(homeGoals, awayGoals);
         this._teamsSummary.push(homeTeamSummary);
       }
-
-      hasTeam?.update(match.homeTeamGoals, match.awayTeamGoals);
+      hasTeam?.update(homeGoals, awayGoals);
     });
-
     return this._teamsSummary;
   }
 
@@ -98,7 +94,7 @@ export default class LeaderboardService {
   }
 
   public async getLeaderboard() {
-    const leaderBoard = await this.getTeamStatus();
+    const leaderBoard = await this.createLeaderBoard();
 
     const ordenedLeaderBoard = leaderBoard
       .sort(LeaderboardService.sortByPoints);
@@ -106,3 +102,11 @@ export default class LeaderboardService {
     return ordenedLeaderBoard;
   }
 }
+
+// matches é um array com os objetos abaixo:
+// {
+// homeTeamId: 16,
+// awayTeamId: 8,
+// homeTeamGoals: 2,
+// awayTeamGoals: 2,
+// }
