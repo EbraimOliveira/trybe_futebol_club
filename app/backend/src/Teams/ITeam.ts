@@ -1,4 +1,4 @@
-// type ITeam = {
+// export default interface ITeam {
 //   name: string,
 //   totalPoints: number,
 //   totalGames: number,

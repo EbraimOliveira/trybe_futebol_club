@@ -3,13 +3,15 @@ import LeaderboardService from '../service/LeaderboardService';
 import { OK } from '../utils/statusCode';
 
 export default class LeaderboardController {
-  private _leaderboardService: LeaderboardService;
-  constructor() {
-    this._leaderboardService = new LeaderboardService();
-  }
+  // private _leaderboardService: LeaderboardService;
+  // constructor() {
+  // }
 
   public async finishedMatches(_req: Request, res:Response) {
-    const response = await this._leaderboardService.setTeamStatus();
+    console.log(this.finishedMatches);
+
+    const leaderboardService = new LeaderboardService();
+    const response = await leaderboardService.getLeaderboard();
     return res.status(OK).json(response);
   }
 }

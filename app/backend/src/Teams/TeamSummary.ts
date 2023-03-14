@@ -1,62 +1,78 @@
 export default class TeamSummary {
-  private _name: string;
-  private _totalPoints: number;
-  private _totalGames: number;
-  private _totalVictories: number;
-  private _totalDraws: number;
-  private _totalLosses: number;
-  private _goalsFavor: number;
-  private _goalsOwn: number;
-  private _goalsBalance:number;
-  private _efficiency: number;
+  private name: string;
+  private totalPoints: number;
+  private totalGames: number;
+  private totalVictories: number;
+  private totalDraws: number;
+  private totalLosses: number;
+  private goalsFavor: number;
+  private goalsOwn: number;
+  private goalsBalance:number;
+  private efficiency: number;
 
   constructor(name:string) {
-    this._name = name;
-    this._totalPoints = 0;
-    this._totalGames = 0;
-    this._totalVictories = 0;
-    this._totalDraws = 0;
-    this._totalLosses = 0;
-    this._goalsFavor = 0;
-    this._goalsOwn = 0;
-    this._goalsBalance = 0;
-    this._efficiency = 0;
+    this.name = name;
+    this.totalPoints = 0;
+    this.totalGames = 0;
+    this.totalVictories = 0;
+    this.totalDraws = 0;
+    this.totalLosses = 0;
+    this.goalsFavor = 0;
+    this.goalsOwn = 0;
+    this.goalsBalance = 0;
+    this.efficiency = 0;
   }
 
-  public get name() {
-    return this._name;
+  public get teamName() {
+    return this.name;
   }
 
-  private goalsBalance() {
-    this._goalsBalance = this._goalsFavor - this._goalsOwn;
+  public get points() {
+    return this.totalPoints;
   }
 
-  private efficiency() {
-    this._efficiency = Number(
-      ((this._totalPoints / (this._totalGames * 3)) * 100).toFixed(2),
+  public get victories() {
+    return this.totalVictories;
+  }
+
+  public get balance() {
+    return this.goalsBalance;
+  }
+
+  public get myGoals() {
+    return this.goalsFavor;
+  }
+
+  private GoalsBalance() {
+    this.goalsBalance = this.goalsFavor - this.goalsOwn;
+  }
+
+  private Efficiency() {
+    this.efficiency = Number(
+      ((this.totalPoints / (this.totalGames * 3)) * 100).toFixed(2),
     );
   }
 
   private always(goalsFavor: number, goalsOwn: number) {
-    this._totalGames += 1;
-    this._goalsFavor += goalsFavor;
-    this._goalsOwn += goalsOwn;
-    this.goalsBalance();
-    this.efficiency();
+    this.totalGames += 1;
+    this.goalsFavor += goalsFavor;
+    this.goalsOwn += goalsOwn;
+    this.GoalsBalance();
+    this.Efficiency();
   }
 
   private setVictory() {
-    this._totalVictories += 1;
-    this._totalPoints += 3;
+    this.totalVictories += 1;
+    this.totalPoints += 3;
   }
 
   private setLoss() {
-    this._totalLosses += 1;
+    this.totalLosses += 1;
   }
 
   private setDraw() {
-    this._totalDraws += 1;
-    this._totalPoints += 1;
+    this.totalDraws += 1;
+    this.totalPoints += 1;
   }
 
   private static findResult(goalsFavor: number, goalsOwn: number) {
@@ -89,35 +105,16 @@ export default class TeamSummary {
 //   const result = goalsFavor > goalsOwn ? 'win' : (goalsFavor < goalsOwn ? 'lose' : 'draw');
 //   switch (result) {
 //     case 'win': {
-//       this._totalVictories += 1;
-//       this._totalPoints += 3;
+//       this.totalVictories += 1;
+//       this.totalPoints += 3;
 //     }
 //     case 'lose': {
-//       this._totalLosses += 1;
+//       this._totalLosses + 1;
 //     }
 //     default: {
 //       this._totalDraws += 1;
-//       this._totalPoints += 1;
+//       this.totalPoints += ;
 //     }
 //   }
 //   this.always(goalsFavor, goalsOwn);
-// }
-
-// ....................................................................................
-// GREIN:
-
-// public set totalPoints( param:number ){
-//  this._totalPoints = param;
-// }
-
-// public set goalsFavor( param:number ){
-//  this._goalsFavor = param;
-// }
-
-// public set totalVicotories( param:number ){
-//   this._totalVictories = param;
-// }
-
-// public set totalLosses( param:number ){
-//   this._totalLosses = param;
 // }

@@ -10,11 +10,11 @@ type match = {
 };
 
 export default class LeaderboardService {
-  public _teamsStatusList: Array<TeamSummary>;
+  public _teamsSummary: Array<TeamSummary>;
   private _teamService: TeamsService;
 
   constructor() {
-    this._teamsStatusList = [];
+    this._teamsSummary = [];
     this._teamService = new TeamsService();
   }
 
@@ -30,77 +30,67 @@ export default class LeaderboardService {
     return closedMatches;
   };
 
-  public async setTeamStatus() {
+  private async getTeamStatus() {
     const matches = await this.finishedMatches();
     const teamsNames = await this._teamService.findAll();
 
     matches.forEach((match) => {
-      const hasTeam = this._teamsStatusList
-        .find((team) => team.name === teamsNames[match.homeTeamId - 1].teamName);
+      const hasTeam = this._teamsSummary
+        .find((team) => team.teamName
+        === teamsNames[match.homeTeamId - 1].teamName);
 
       if (!hasTeam) {
-        const homeTeamSummary = new TeamSummary(teamsNames[match.homeTeamId - 1].teamName);
+        const homeTeamSummary = new TeamSummary(
+          teamsNames[match.homeTeamId - 1].teamName,
+        );
         homeTeamSummary.update(match.homeTeamGoals, match.awayTeamGoals);
-        this._teamsStatusList.push(homeTeamSummary);
+        this._teamsSummary.push(homeTeamSummary);
       }
 
-      if (hasTeam) {
-        hasTeam.update(match.homeTeamGoals, match.awayTeamGoals);
-      }
+      hasTeam?.update(match.homeTeamGoals, match.awayTeamGoals);
     });
-    return this._teamsStatusList;
+
+    return this._teamsSummary;
+  }
+
+  private static sortByGoalsFavor(a: TeamSummary, b:TeamSummary) {
+    const byGoals = b.myGoals - a.myGoals;
+    return byGoals;
+  }
+
+  private static sortByGoalsBalance(a: TeamSummary, b:TeamSummary) {
+    const byBalace = b.balance - a.balance;
+    if (byBalace === 0) {
+      LeaderboardService.sortByGoalsFavor(a, b);
+    }
+
+    return byBalace;
+  }
+
+  private static sortByVictories(a: TeamSummary, b:TeamSummary) {
+    const byVictories = b.victories - a.victories;
+    if (byVictories === 0) {
+      LeaderboardService.sortByGoalsBalance(a, b);
+    }
+
+    return byVictories;
+  }
+
+  private static applySort(a: TeamSummary, b:TeamSummary) {
+    const byPoint = b.points - a.points;
+    if (byPoint === 0) {
+      LeaderboardService.sortByVictories(a, b);
+    }
+
+    return byPoint;
+  }
+
+  public async getLeaderboard() {
+    const leaderBoard = await this.getTeamStatus();
+
+    const ordenedLeaderBoard = leaderBoard
+      .sort(LeaderboardService.applySort);
+
+    return ordenedLeaderBoard;
   }
 }
-
-// const response = this.mathhees.map((match) => {
-
-//   const summaryExists = teams.find((team) => {
-//     team.name === `name_${match.homeTeamId}`;
-//   });
-
-//   if (!summaryExists) {
-//     const homeTeamSummary = new TeamSummary(`name_${match.homeTeamId}`);
-//     homeTeamSummary.update(match.homeTeamGoals, match.awayTeamGoals);
-
-//     teams.push(homeTeamSummary);
-//   }
-//   if(summaryExists)
-//   summaryExists.update(match.homeTeamGoals, match.awayTeamGoals);
-//   return this.response
-// });
-
-// return newList;
-// return closedMatches;
-
-// ..........................................................................................
-// GREIN:
-// const newList:any = [];
-//   closedMatches.forEach((match)=>{
-//       const goalsFavor = match.homeTeamGoals;
-//       const goalsOwn = match.awayTeamGoals;
-
-//       const home = new TeamSummary(`name_${match.homeTeamId}`)
-//       const away = new TeamSummary(`name_${match.awayTeamId}`)
-
-//       home.totalPoints = match.homeTeamGoals;
-//       home.goalsFavor = match.homeTeamGoals;
-//       away.totalPoints = match.awayTeamGoals;
-//       away.goalsFavor = match.awayTeamGoals;
-
-//      const result = goalsFavor > goalsOwn ? 'win' : (goalsFavor < goalsOwn ? 'lose' : 'draw');
-//       switch (result) {
-//     case 'win': {
-//       home.totalVicotories = 1;
-//       home.totalPoints = 3;
-//       away.totalLosses = 1;
-//     }
-//     case 'lose': {
-//       this._totalLosses += 1;
-//     }
-//     default: {
-//       this._totalDraws += 1;
-//       this._totalPoints += 1;
-//     }
-//   }
-//       newList.push(home, away)
-//     })
