@@ -37,20 +37,6 @@ export default class MatchesController {
     return res.status(OK).json({ message: 'Finished' });
   }
 
-  // private notFound = (res:Response):Response<any> => {
-  //   return res.status(NOT_FOUND)
-  //     .json({ message: 'There is no team with such id!' });
-  // }
-
-  // private unprocessable = (res:Response):Response<any> => {
-  //   return res.status(UNPROCESSABLE_ENTITY)
-  //     .json({ message: 'It is not possible to create a match with two equal teams' });
-  // }
-
-  // private created = (res:Response):Response<any> => {
-  //   return res.status(CREATED).json('created');
-  // }
-
   public async newMatch(req:Request, res:Response)
     :Promise<Response> {
     const { body } = req;
@@ -66,16 +52,27 @@ export default class MatchesController {
       default:
         return res.status(CREATED).json(response);
     }
-
-    // const setStatus = {
-    //   nonexistent: (res:Response) => this.notFound(res),
-    //   sameTeam: (res:Response) => this.unprocessable(res),
-    //   success: (res:Response) => this.created(res),
-    // };
-
-  //   return setStatus[response as unknown as Response];
-  // }
   }
 }
+// }
 
 // A queryParam inProgress pode ou não existir, então eu assumo que existe e passo na 'fetchMatchesInfo' para verificar na Service.
+
+// const setStatus = {
+//   nonexistent: {
+//     status: NOT_FOUND,
+//     message: 'There is no team with such id!'
+//   },
+//   sameTeam: {
+//     status: UNPROCESSABLE_ENTITY,
+//     message: 'It is not possible to create a match with two equal teams'
+//   },
+//   success: {
+//     status:CREATED,
+//     message: 'created'
+//   }
+// };
+
+// const { status, message } = setStatus[response as keyof typeof setStatus];
+
+// return res.status(status).json(message)

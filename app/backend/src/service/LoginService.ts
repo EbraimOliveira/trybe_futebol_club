@@ -13,11 +13,11 @@ export default class LoginService {
       }
     }
     return null;
-
-    // hash é a senha criptografada após a aplicação de um algoritmo no plainText;
-    // plainText é a senha de fato, sem criptografar;
-    // o compare vai passar novamente o plainText e comparar o hash resultante com o do banco;
   };
+
+  // hash é a senha criptografada após a aplicação de um algoritmo no plainText;
+  // plainText é a senha de fato, sem criptografar;
+  // o compare vai passar novamente o plainText e comparar o hash resultante com o do banco;
 
   public getUser = async (id:number):Promise<User | null> => {
     const user = await User.findOne({ where: { id } });

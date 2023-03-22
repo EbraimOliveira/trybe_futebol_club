@@ -32,24 +32,20 @@ export default class MatchesService {
   public updateMatch = async (id:number, homeTeamGoals:number, awayTeamGoals:number) => Match
     .update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
 
-  public newMatch = async (body: Match) => {
-    let response: Match | string;
-    // delete body.id;
+  public newMatch = async (body: Match):Promise<string> => {
     const { id, ...myBody } = body;
 
     if (body.awayTeamId === body.homeTeamId) {
-      response = 'sameTeam';
-      return response;
+      return 'sameTeam';
     }
     const homeTeam = await Team.findByPk(body.homeTeamId);
     const awayTeam = await Team.findByPk(body.awayTeamId);
 
     if (!homeTeam || !awayTeam) {
-      response = 'nonexistent';
-      return response;
+      return 'nonexistent';
     }
-    response = await Match.create({ ...myBody, inProgress: true });
-    return response;
+    await Match.create({ ...myBody, inProgress: true });
+    return 'created';
   };
 }
 

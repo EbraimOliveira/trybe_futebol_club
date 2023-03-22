@@ -1,7 +1,7 @@
-import TeamSummary from "./TeamSummary";
+import TeamSummary from './TeamSummary';
 
 export default class ApplySort {
-    private static sortByGoalsOwn(a: TeamSummary, b:TeamSummary) {
+  private static sortByGoalsOwn(a: TeamSummary, b:TeamSummary) {
     return a.myGoalsOwn - b.myGoalsOwn;
   }
 
