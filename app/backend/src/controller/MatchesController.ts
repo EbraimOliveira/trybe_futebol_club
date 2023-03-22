@@ -33,7 +33,11 @@ export default class MatchesController {
     const { homeTeamGoals, awayTeamGoals } = req.body;
 
     this._matchesService
-      .updateMatch(Number(id), Number(homeTeamGoals), Number(awayTeamGoals));
+      .updateMatch(
+        Number(id),
+        Number(homeTeamGoals),
+        Number(awayTeamGoals),
+      );
     return res.status(OK).json({ message: 'Finished' });
   }
 

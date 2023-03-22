@@ -58,4 +58,4 @@ export default class MatchesService {
 // Então, dentro do if, comparo o boolean gerado com o dado da tabela, no campo inProgress, dentro do where.
 // Se o boolean gerado no inProgressBolean for false então o findAll do if retornará todas as partidas onde o campo inProgress é === false.
 
-// O delete body.id foi necessario porque o id estava sendo salvo no body quando valida o jwt, poreḿ o LINT reclamou e substitui pela desconstrução do objeto, excluindo o id e armazendo o resto das informações no MyBody.
+// O delete body.id foi necessario porque o id estava sendo salvo no body quando valida o jwt, poreḿ o LINT reclamou e substitui pela desconstrução do objeto, excluindo o id e armazendo o resto das informações no myBody.
